@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>DOD · 닷</title>
+<meta name="application-name" content="DOD">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DOD">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a1a1a">
+<link rel="manifest" href="/DOD/manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEwMCIgZmlsbD0iIzFhMWExYSIvPgogIDx0ZXh0IHg9IjI1NiIgeT0iMzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssc2Fucy1zZXJpZiIgCiAgICAgICAgZm9udC1zaXplPSIyMDAiIGZvbnQtd2VpZ2h0PSI5MDAiIGxldHRlci1zcGFjaW5nPSI4Ij4KICAgIDx0c3BhbiBmaWxsPSIjRkYzQjJGIj5EPC90c3Bhbj48dHNwYW4gZmlsbD0iI0ZGQ0MwMCI+TzwvdHNwYW4+PHRzcGFuIGZpbGw9IiMzNEM3NTkiPkQ8L3RzcGFuPgogIDwvdGV4dD4KPC9zdmc+">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEwMCIgZmlsbD0iIzFhMWExYSIvPgogIDx0ZXh0IHg9IjI1NiIgeT0iMzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssc2Fucy1zZXJpZiIgCiAgICAgICAgZm9udC1zaXplPSIyMDAiIGZvbnQtd2VpZ2h0PSI5MDAiIGxldHRlci1zcGFjaW5nPSI4Ij4KICAgIDx0c3BhbiBmaWxsPSIjRkYzQjJGIj5EPC90c3Bhbj48dHNwYW4gZmlsbD0iI0ZGQ0MwMCI+TzwvdHNwYW4+PHRzcGFuIGZpbGw9IiMzNEM3NTkiPkQ8L3RzcGFuPgogIDwvdGV4dD4KPC9zdmc+">
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -1142,6 +1151,16 @@ function loadFromStorage() {
 
 loadFromStorage();
 setInterval(tickTimers, 1000);
+
+// ── PWA 서비스 워커 등록 ─────────────────────────────────
+if('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/DOD/sw.js')
+      .then(r => console.log('SW 등록:', r.scope))
+      .catch(e => console.log('SW 실패:', e));
+  });
+}
+
 updateClock();
 render();
 </script>

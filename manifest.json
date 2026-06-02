@@ -1,0 +1,27 @@
+{
+  "name": "DOD · 닷 — Do or Don't",
+  "short_name": "DOD",
+  "description": "지금이 지방 태우기 좋은 타이밍일까?",
+  "start_url": "/DOD/",
+  "scope": "/DOD/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a1a1a",
+  "theme_color": "#1a1a1a",
+  "lang": "ko",
+  "categories": ["health", "fitness"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEwMCIgZmlsbD0iIzFhMWExYSIvPgogIDx0ZXh0IHg9IjI1NiIgeT0iMzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssc2Fucy1zZXJpZiIgCiAgICAgICAgZm9udC1zaXplPSIyMDAiIGZvbnQtd2VpZ2h0PSI5MDAiIGxldHRlci1zcGFjaW5nPSI4Ij4KICAgIDx0c3BhbiBmaWxsPSIjRkYzQjJGIj5EPC90c3Bhbj48dHNwYW4gZmlsbD0iI0ZGQ0MwMCI+TzwvdHNwYW4+PHRzcGFuIGZpbGw9IiMzNEM3NTkiPkQ8L3RzcGFuPgogIDwvdGV4dD4KPC9zdmc+",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEwMCIgZmlsbD0iIzFhMWExYSIvPgogIDx0ZXh0IHg9IjI1NiIgeT0iMzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssc2Fucy1zZXJpZiIgCiAgICAgICAgZm9udC1zaXplPSIyMDAiIGZvbnQtd2VpZ2h0PSI5MDAiIGxldHRlci1zcGFjaW5nPSI4Ij4KICAgIDx0c3BhbiBmaWxsPSIjRkYzQjJGIj5EPC90c3Bhbj48dHNwYW4gZmlsbD0iI0ZGQ0MwMCI+TzwvdHNwYW4+PHRzcGFuIGZpbGw9IiMzNEM3NTkiPkQ8L3RzcGFuPgogIDwvdGV4dD4KPC9zdmc+",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
