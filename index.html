@@ -697,15 +697,15 @@ function render() {
       <div class="ob-title">신체 정보 입력</div>
       <div class="ob-desc" style="margin-bottom:1.5rem;">정확한 추정을 위해 딱 한 번만 입력하면 돼요.</div>
       <span class="ob-label">나이</span>
-      <input type="number" id="f-age" value="${S.profile.age}" placeholder="나이" oninput="S.profile.age=parseInt(this.value)||S.profile.age">
+      <input type="number" id="f-age" value="${S.profile.age}" placeholder="나이" oninput="S.profile.age=parseInt(this.value)||S.profile.age;saveToStorage()">
       <span class="ob-label">성별</span>
       <div class="seg" style="margin-bottom:1.2rem;">
         <button class="seg-btn ${S.profile.gender==='male'?'act-b':''}" onclick="setGender('male')">남성</button>
         <button class="seg-btn ${S.profile.gender==='female'?'act-r':''}" onclick="setGender('female')">여성</button>
       </div>
       <div style="display:flex;gap:12px;">
-        <div style="flex:1;"><span class="ob-label">키 (cm)</span><input type="number" id="f-height" value="${S.profile.height}" oninput="S.profile.height=parseInt(this.value)||S.profile.height"></div>
-        <div style="flex:1;"><span class="ob-label">체중 (kg)</span><input type="number" id="f-weight" value="${S.profile.weight}" oninput="S.profile.weight=parseInt(this.value)||S.profile.weight"></div>
+        <div style="flex:1;"><span class="ob-label">키 (cm)</span><input type="number" id="f-height" value="${S.profile.height}" oninput="S.profile.height=parseInt(this.value)||S.profile.height;saveToStorage()"></div>
+        <div style="flex:1;"><span class="ob-label">체중 (kg)</span><input type="number" id="f-weight" value="${S.profile.weight}" oninput="S.profile.weight=parseInt(this.value)||S.profile.weight;saveToStorage()"></div>
       </div>
       <button class="ob-cta green" onclick="saveBody()">다음</button>
     </div></div>`;
@@ -1011,16 +1011,16 @@ function saveBody() {
   if(ageEl)    S.profile.age    = parseInt(ageEl.value)    || S.profile.age;
   if(hEl)      S.profile.height = parseInt(hEl.value)      || S.profile.height;
   if(wEl)      S.profile.weight = parseInt(wEl.value)      || S.profile.weight;
-  S.obStep = 2; render();
+  S.obStep = 2; saveToStorage(); render();
 }
-function finishOb()  { S.screen='main'; render(); }
+function finishOb()  { S.screen='main'; saveToStorage(); render(); }
 function goOb()      { S.obStep=1; S.screen='onboard'; render(); }
 function goScreen(s) { S.screen=s; render(); }
 function openSheet(t){ S.sheet=t; S.sf.mealTime=nowT(); S.sf.exTime=nowT(); render(); }
 function closeSheet(){ S.sheet=null; render(); }
-function toggleAlarm(k){ S.alarms[k]=!S.alarms[k]; render(); }
+function toggleAlarm(k){ S.alarms[k]=!S.alarms[k]; saveToStorage(); render(); }
 function toggleSci(id){ S.sciOpen[id]=!S.sciOpen[id]; render(); }
-function toggleTheme(){ S.theme=S.theme==='light'?'dark':'light'; render(); }
+function toggleTheme(){ S.theme=S.theme==='light'?'dark':'light'; saveToStorage(); render(); }
 
 function saveMeal() {
   const t = document.getElementById('meal-time')?.value||nowT();
@@ -1028,6 +1028,7 @@ function saveMeal() {
   const d = new Date(); d.setHours(parseInt(hh),parseInt(mm),0,0);
   if(d > new Date()) d.setDate(d.getDate()-1);
   S.lastMeal = {time:d.toISOString(), foodType:S.sf.foodType, qty:S.sf.qty};
+  saveToStorage();
   S.sheet=null; render();
 }
 function saveEx() {
@@ -1036,6 +1037,7 @@ function saveEx() {
   const d = new Date(); d.setHours(parseInt(hh),parseInt(mm),0,0);
   if(d > new Date()) d.setDate(d.getDate()-1);
   S.lastEx = {time:d.toISOString(), type:S.sf.exType, intensity:S.sf.intensity};
+  saveToStorage();
   S.sheet=null; render();
 }
 
@@ -1106,6 +1108,39 @@ function tickTimers() {
   }
 }
 
+
+// ── localStorage 영구 저장 ────────────────────────────────
+const STORAGE_KEY = 'dod_data_v1';
+
+function saveToStorage() {
+  try {
+    const data = {
+      profile: S.profile,
+      lastMeal: S.lastMeal,
+      lastEx: S.lastEx,
+      alarms: S.alarms,
+      theme: S.theme,
+      obDone: S.screen !== 'onboard',
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch(e) { console.warn('저장 실패:', e); }
+}
+
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (data.profile) S.profile = { ...S.profile, ...data.profile };
+    if (data.lastMeal) S.lastMeal = data.lastMeal;
+    if (data.lastEx)   S.lastEx   = data.lastEx;
+    if (data.alarms)   S.alarms   = { ...S.alarms, ...data.alarms };
+    if (data.theme)    S.theme    = data.theme;
+    if (data.obDone)   S.screen   = 'main';
+  } catch(e) { console.warn('불러오기 실패:', e); }
+}
+
+loadFromStorage();
 setInterval(tickTimers, 1000);
 updateClock();
 render();
