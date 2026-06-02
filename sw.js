@@ -1,4 +1,4 @@
-const CACHE = 'dod-v1';
+const CACHE = 'dod-v2';
 const ASSETS = [
   '/DOD/',
   '/DOD/index.html',
