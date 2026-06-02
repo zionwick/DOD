@@ -1,8 +1,10 @@
-const CACHE = 'dod-v2';
+const CACHE = 'dod-v3';
 const ASSETS = [
   '/DOD/',
   '/DOD/index.html',
   '/DOD/manifest.json',
+  '/DOD/icon-192.png',
+  '/DOD/icon-512.png',
 ];
 
 self.addEventListener('install', e => {
