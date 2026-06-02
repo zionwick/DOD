@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>DOD · 닷</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bk:#1a1a1a;--green:#34C759;--red:#FF3B2F;--yellow:#FFCC00;--blue:#0064D2;
+  --ivory:#f5f0e8;--white:#ffffff;--gray:#888780;
+}
+html,body{height:100%;font-family:'Noto Sans KR',sans-serif;overflow:hidden;}
+
+/* THEME */
+body.light{background:var(--ivory);}
+body.dark{background:#0d0d0d;--muted:rgba(255,255,255,.55);}
+
+#app{width:100%;max-width:390px;height:100%;margin:0 auto;display:flex;flex-direction:column;position:relative;overflow:hidden;}
+body.light #app{background:var(--ivory);}
+body.dark #app{background:#0d0d0d;}
+
+/* SCREENS */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;transition:transform .3s ease,opacity .3s;}
+.screen.hidden{transform:translateX(100%);opacity:0;pointer-events:none;}
+body.light .screen{background:var(--ivory);}
+body.dark .screen{background:#0d0d0d;}
+
+/* HEADER */
+.hdr{display:flex;justify-content:space-between;align-items:center;padding:10px 16px 9px;border-bottom:3px solid var(--bk);gap:8px;}
+body.light .hdr{background:var(--bk);}
+body.dark .hdr{background:#000;border-color:#000;}
+.logo{font-family:'Black Han Sans',sans-serif;font-size:22px;letter-spacing:.08em;color:#fff;}
+.hdr-right{display:flex;align-items:center;gap:10px;}
+.dots{display:flex;gap:5px;}
+.dot{width:8px;height:8px;border-radius:50%;}
+.theme-tog{background:none;border:none;cursor:pointer;font-size:22px;padding:2px 4px;line-height:1;touch-action:manipulation;transition:transform .15s;}
+.theme-tog:active{transform:scale(.85);}
+.theme-tog:active{transform:scale(0.92);}
+body.light .theme-tog{border-color:rgba(0,0,0,.18)!important;background:rgba(0,0,0,.06)!important;}
+
+/* STATUS CARD */
+.st-card{margin:12px 14px 9px;border-radius:20px;border:3px solid var(--bk);padding:16px 16px 13px;position:relative;overflow:hidden;box-shadow:4px 4px 0 var(--bk);}
+body.dark .st-card{box-shadow:0 0 0 1px #111,4px 4px 0 #000;}
+.st-bubble{position:absolute;top:-24px;right:-24px;width:90px;height:90px;border-radius:50%;background:rgba(0,0,0,.1);}
+.st-eyebrow{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:.15em;margin-bottom:6px;}
+.st-word{font-family:'Black Han Sans',sans-serif;line-height:.88;transition:font-size .2s;}
+.st-badge{margin-top:10px;border-radius:10px;padding:5px 10px;display:inline-flex;align-items:center;gap:6px;background:rgba(0,0,0,.18);}
+.st-badge-txt{font-size:15px;font-weight:700;color:#fff;letter-spacing:.04em;}
+
+/* FASTING CARD */
+.fast-card{margin:0 14px 9px;border-radius:16px;border:3px solid var(--bk);padding:11px 13px;box-shadow:3px 3px 0 var(--bk);}
+body.dark .fast-card{box-shadow:2px 2px 0 #000;}
+.fast-card.yellow{background:var(--yellow);}
+body.dark .fast-card.neutral{background:#1a1a1a;border-color:#2a2a2a;box-shadow:none;}
+body.light .fast-card.neutral{background:var(--white);border-color:var(--bk);}
+.fc-lbl{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;letter-spacing:.12em;margin-bottom:5px;}
+.fast-card.yellow .fc-lbl{color:rgba(0,0,0,.42);}
+body.dark .fast-card.neutral .fc-lbl{color:#aaa;}
+body.light .fast-card.neutral .fc-lbl{color:#aaa;}
+.fc-val{font-family:'Space Mono',monospace;font-size:26px;font-weight:700;line-height:1;}
+.fast-card.yellow .fc-val{color:#000;}
+body.dark .fast-card.neutral .fc-val{color:#fff;}
+body.light .fast-card.neutral .fc-val{color:var(--bk);}
+.fc-sub{font-size:15px;margin-top:5px;}
+.fast-card.yellow .fc-sub{color:rgba(0,0,0,.42);}
+body.dark .fast-card.neutral .fc-sub{color:#aaa;}
+body.light .fast-card.neutral .fc-sub{color:#999;}
+.fc-bar{height:6px;border-radius:99px;margin-top:9px;overflow:hidden;}
+.fast-card.yellow .fc-bar{background:rgba(0,0,0,.15);}
+.fc-fill{height:6px;background:var(--bk);border-radius:99px;}
+.fc-labels{display:flex;justify-content:space-between;margin-top:6px;}
+.fc-labels span{font-size:16px;}
+.fast-card.yellow .fc-labels span{color:rgba(0,0,0,.38);}
+.fast-card.yellow .fc-labels .mid{color:#000;font-weight:700;}
+.fc-chips{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap;}
+.chip{font-size:16px;padding:2px 7px;border-radius:99px;}
+.chip.done{background:rgba(0,0,0,.2);color:#000;}
+.chip.next{background:rgba(0,0,0,.12);color:#000;border:1px solid rgba(0,0,0,.22);}
+.chip.todo{background:rgba(0,0,0,.1);color:rgba(0,0,0,.42);}
+
+/* MSG CARD */
+.msg-card{margin:0 14px 9px;border-radius:14px;border:2.5px solid var(--bk);padding:10px 12px;display:flex;align-items:center;gap:10px;}
+body.light .msg-card{background:var(--white);box-shadow:3px 3px 0 var(--bk);}
+body.dark .msg-card{background:#1a1a1a;border-color:#2a2a2a;box-shadow:none;}
+.msg-icon-wrap{width:34px;height:34px;border-radius:9px;border:2px solid var(--bk);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+body.dark .msg-icon-wrap{border-color:#2a2a2a;}
+.msg-title{font-size:16px;font-weight:900;margin-bottom:2px;}
+body.light .msg-title{color:var(--bk);}
+body.dark .msg-title{color:#fff;}
+.msg-sub{font-size:14px;}
+body.light .msg-sub{color:#888;}
+body.dark .msg-sub{color:#87CEEB;}
+
+/* ACTION BTNS */
+.act-row{display:flex;gap:8px;padding:0 14px 10px;}
+.act-btn{flex:1;border:2.5px solid var(--bk);border-radius:12px;padding:0;height:58px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s;touch-action:manipulation;}
+body.light .act-btn{box-shadow:3px 3px 0 var(--bk);}
+body.dark .act-btn{border-color:#2a2a2a;box-shadow:2px 2px 0 #000;}
+.act-btn:active{transform:scale(0.95);}
+.act-btn.red{background:var(--red);}
+.act-btn.blue{background:var(--blue);}
+.act-inner{display:flex;align-items:center;justify-content:center;gap:5px;}
+.act-txt{font-size:15px;font-weight:900;color:#fff;}
+
+/* NAV */
+.nav{display:flex;justify-content:space-around;padding:10px 16px 14px;flex-shrink:0;}
+body.light .nav{background:var(--bk);border-top:3px solid #000;}
+body.dark .nav{background:#000;border-top:2px solid #1a1a1a;}
+.nav-btn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;transition:transform .12s;touch-action:manipulation;}
+.nav-btn:active{transform:scale(0.9);}
+body.light .nav-btn.inactive{background:#2a2a2a;}
+body.dark .nav-btn.inactive{background:#1a1a1a;}
+
+/* SHEET */
+.sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:390px;border-radius:24px 24px 0 0;z-index:100;transition:transform .35s cubic-bezier(.4,0,.2,1);max-height:90vh;overflow-y:auto;border-top:3px solid var(--bk);}
+body.light .sheet{background:var(--white);}
+body.dark .sheet{background:#161616;}
+.sheet.hidden{transform:translate(-50%,100%);}
+.sheet-handle{width:40px;height:4px;border-radius:99px;margin:12px auto 0;}
+body.light .sheet-handle{background:rgba(0,0,0,.15);}
+body.dark .sheet-handle{background:rgba(255,255,255,.15);}
+.sheet-title{font-size:18px;font-weight:900;padding:12px 16px 3px;}
+body.light .sheet-title{color:var(--bk);}
+body.dark .sheet-title{color:#fff;}
+.sheet-sub{font-size:14px;padding:0 16px 12px;}
+body.light .sheet-sub{color:#888;}
+body.dark .sheet-sub{color:#bbb;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:99;transition:opacity .3s;}
+.overlay.hidden{opacity:0;pointer-events:none;}
+
+.sec-lbl{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:.12em;padding:0 16px 7px;display:block;}
+body.light .sec-lbl{color:#aaa;}
+body.dark .sec-lbl{color:#aaa;}
+
+input[type=time]{border-radius:10px;padding:9px 14px;font-family:'Space Mono',monospace;font-size:1rem;outline:none;margin:0 16px 14px;width:calc(100% - 32px);}
+body.light input[type=time]{background:#f0ede6;border:2px solid var(--bk);color:var(--bk);}
+body.dark input[type=time]{background:#1a1a1a;border:1.5px solid #2a2a2a;color:#fff;}
+input[type=time]:focus{border-color:var(--green);}
+body.dark input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.8;cursor:pointer;}
+body.dark input[type=time]::-webkit-datetime-edit{color:#fff;}
+body.light input[type=time]::-webkit-calendar-picker-indicator{opacity:.6;cursor:pointer;}
+
+.food-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px 14px;}
+.food-item{border-radius:12px;padding:9px 4px 7px;text-align:center;cursor:pointer;border:2.5px solid transparent;transition:all .15s;touch-action:manipulation;}
+body.light .food-item{background:#f0ede6;}
+body.dark .food-item{background:#1a1a1a;}
+.food-item.sel-r{background:rgba(255,59,47,.22)!important;border-color:var(--red)!important;}
+.food-item.sel-g{background:rgba(52,199,89,.22)!important;border-color:var(--green)!important;}
+.food-item .fi-nm{font-size:15px;margin-top:3px;display:block;}
+body.light .food-item .fi-nm{color:#888;}
+body.dark .food-item .fi-nm{color:#ccc;}
+.food-item.sel-r .fi-nm{color:var(--red)!important;font-weight:700!important;}
+.food-item.sel-g .fi-nm{color:var(--green)!important;font-weight:700!important;}
+
+.qty-row{display:flex;gap:8px;padding:0 16px 14px;}
+.qty-btn{flex:1;border-radius:10px;padding:8px 0;text-align:center;font-size:16px;cursor:pointer;border:2px solid transparent;transition:all .15s;touch-action:manipulation;}
+body.light .qty-btn{background:#f0ede6;color:#888;border-color:#ddd;}
+body.dark .qty-btn{background:#1e1e1e;color:#ccc;border-color:#333;}
+.qty-btn.sel-r{background:rgba(255,59,47,.22)!important;color:var(--red)!important;border-color:var(--red)!important;font-weight:700!important;}
+.qty-btn.sel-g{background:rgba(52,199,89,.22)!important;color:var(--green)!important;border-color:var(--green)!important;font-weight:700!important;}
+
+.preview-box{margin:0 16px 12px;border-radius:13px;padding:10px 13px;border:2px solid var(--yellow);background:rgba(255,204,0,.1);}
+.preview-box .pb-lbl{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#997700;letter-spacing:.08em;margin-bottom:7px;}
+body.dark .preview-box .pb-lbl{color:var(--yellow);}
+.pb-row{display:flex;justify-content:space-between;margin-bottom:3px;}
+.pb-k{font-size:16px;}
+body.light .pb-k{color:#888;}
+body.dark .pb-k{color:#bbb;}
+.pb-v{font-size:16px;font-weight:700;}
+body.light .pb-v{color:var(--bk);}
+body.dark .pb-v{color:#fff;}
+.pb-v.g{color:var(--green);}
+
+.sheet-cta{margin:4px 16px 0;border-radius:13px;padding:13px;text-align:center;font-size:16px;font-weight:900;border:3px solid var(--bk);cursor:pointer;width:calc(100% - 32px);touch-action:manipulation;}
+body.dark .sheet-cta{border-color:#2a2a2a;}
+.sheet-cta.red{background:var(--red);color:#fff;}
+.sheet-cta.green{background:var(--green);color:#000;}
+
+.divider{height:2px;margin:0 16px 12px;}
+body.light .divider{background:rgba(0,0,0,.08);}
+body.dark .divider{background:rgba(255,255,255,.08);}
+
+/* SCIENCE + SETTINGS */
+.page-hd{display:flex;align-items:center;gap:10px;padding:12px 16px 8px;}
+.back-btn{width:34px;height:34px;border-radius:50%;border:2.5px solid var(--bk);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:900;}
+body.light .back-btn{background:var(--white);color:var(--bk);}
+body.dark .back-btn{background:#1a1a1a;border-color:#333;color:#fff;}
+.page-title{font-family:'Black Han Sans',sans-serif;font-size:18px;letter-spacing:.04em;}
+body.light .page-title{color:var(--bk);}
+body.dark .page-title{color:#fff;}
+
+.sci-item{margin:0 14px 9px;border-radius:14px;border:2.5px solid;overflow:hidden;}
+body.light .sci-item{border-color:var(--bk);box-shadow:2px 2px 0 var(--bk);}
+body.dark .sci-item{border-color:#2a2a2a;}
+.sci-hd{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;cursor:pointer;}
+body.light .sci-hd{background:var(--white);}
+body.dark .sci-hd{background:#1a1a1a;}
+.sci-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px;border:2px solid var(--bk);}
+body.dark .sci-dot{border-color:#333;}
+.sci-claim{font-size:14px;font-weight:900;flex:1;line-height:1.45;}
+body.light .sci-claim{color:var(--bk);}
+body.dark .sci-claim{color:#fff;}
+.sci-chev{font-size:14px;flex-shrink:0;margin-top:1px;transition:transform .2s;}
+body.light .sci-chev{color:#888;}
+body.dark .sci-chev{color:#aaa;}
+.sci-chev.open{transform:rotate(180deg);}
+.sci-body{padding:0 13px 12px 32px;border-top:2px solid;}
+body.light .sci-body{border-color:rgba(0,0,0,.08);}
+body.dark .sci-body{border-color:#2a2a2a;}
+body.light .sci-body-bg{background:var(--white);}
+body.dark .sci-body-bg{background:#1a1a1a;}
+.sci-sum{font-size:14px;line-height:1.75;padding-top:10px;margin-bottom:8px;}
+body.light .sci-sum{color:#555;}
+body.dark .sci-sum{color:#ccc;}
+.sci-level{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--yellow);margin-bottom:5px;letter-spacing:.06em;}
+.sci-src{font-size:15px;}
+body.light .sci-src{color:#aaa;}
+body.dark .sci-src{color:#aaa;}
+.sci-src a{color:var(--green);}
+
+.disclaimer-box{margin:8px 14px 12px;border-radius:13px;border-left:3px solid var(--yellow);padding:10px 12px;}
+body.light .disclaimer-box{background:rgba(255,204,0,.08);}
+body.dark .disclaimer-box{background:rgba(255,204,0,.06);}
+.disclaimer-box strong{display:block;font-size:15px;letter-spacing:.08em;color:var(--yellow);margin-bottom:5px;}
+.disclaimer-box p{font-size:16px;line-height:1.8;}
+body.light .disclaimer-box p{color:#666;}
+body.dark .disclaimer-box p{color:#d0d0d0;}
+
+.set-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:2px solid;}
+body.light .set-row{border-color:rgba(0,0,0,.07);}
+body.dark .set-row{border-color:rgba(255,255,255,.05);}
+.set-left{display:flex;align-items:center;gap:10px;}
+.set-icon-box{width:34px;height:34px;border-radius:10px;border:2px solid var(--bk);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+body.dark .set-icon-box{border-color:#2a2a2a;}
+.set-name{font-size:15px;font-weight:700;}
+body.light .set-name{color:var(--bk);}
+body.dark .set-name{color:#fff;}
+.set-desc{font-size:15px;margin-top:1px;}
+body.light .set-desc{color:#aaa;}
+body.dark .set-desc{color:#bbb;}
+.tog{width:42px;height:24px;border-radius:12px;position:relative;cursor:pointer;border:2px solid var(--bk);transition:background .2s;touch-action:manipulation;}
+body.dark .tog{border-color:#333;}
+.tog.on{background:var(--green);}
+.tog.off{background:rgba(0,0,0,.12);}
+body.dark .tog.off{background:rgba(255,255,255,.1);}
+.tog-k{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:1px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3);}
+.tog.on .tog-k{left:21px;}
+.tog.off .tog-k{left:1px;}
+
+/* ONBOARDING */
+.ob-wrap{flex:1;display:flex;flex-direction:column;padding:2rem 1.5rem;min-height:100%;}
+.ob-logo{font-family:'Black Han Sans',sans-serif;font-size:2.8rem;letter-spacing:.1em;}
+.ob-tag{font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.14em;margin-bottom:2.5rem;}
+body.light .ob-tag{color:#888;}
+body.dark .ob-tag{color:#aaa;}
+.ob-title{font-size:1.5rem;font-weight:900;line-height:1.3;margin-bottom:.85rem;}
+body.light .ob-title{color:var(--bk);}
+body.dark .ob-title{color:#fff;}
+.ob-desc{font-size:1rem;line-height:1.85;margin-bottom:1.5rem;}
+body.light .ob-desc{color:#666;}
+body.dark .ob-desc{color:#e8e8e8;}
+body.dark .ob-desc strong{color:#fff;}
+.ob-label{font-family:'Space Mono',monospace;font-size:.78rem;font-weight:700;letter-spacing:.08em;margin-bottom:.5rem;display:block;}
+body.light .ob-label{color:#aaa;}
+body.dark .ob-label{color:#ccc;}
+input[type=number]{width:100%;border-radius:10px;padding:.8rem 1rem;font-family:'Noto Sans KR',sans-serif;font-size:1rem;outline:none;margin-bottom:1.2rem;}
+body.light input[type=number]{background:#f0ede6;border:2.5px solid var(--bk);color:var(--bk);}
+body.dark input[type=number]{background:#1a1a1a;border:2px solid #2a2a2a;color:#fff;}
+input[type=number]:focus{border-color:var(--green);}
+.seg{display:flex;border-radius:10px;overflow:hidden;border:2.5px solid var(--bk);margin-bottom:1.2rem;}
+body.dark .seg{border-color:#2a2a2a;}
+.seg-btn{flex:1;padding:.75rem .5rem;text-align:center;font-size:.95rem;font-weight:700;cursor:pointer;border:none;transition:all .18s;touch-action:manipulation;}
+body.light .seg-btn{background:#f0ede6;color:#888;}
+body.dark .seg-btn{background:#1e1e1e;color:#bbb;}
+.seg-btn.act-g{background:var(--green)!important;color:#000!important;}
+.seg-btn.act-r{background:var(--red)!important;color:#fff!important;}
+.seg-btn.act-b{background:var(--blue)!important;color:#fff!important;}
+.ob-cta{width:100%;border:3px solid var(--bk);border-radius:13px;padding:1rem;font-family:'Noto Sans KR',sans-serif;font-size:1rem;font-weight:900;cursor:pointer;margin-top:auto;transition:transform .15s;}
+body.dark .ob-cta{border-color:#333;}
+.ob-cta.green{background:var(--green);color:#000;}
+.ob-cta.yellow{background:var(--yellow);color:#000;}
+.ob-cta:active{transform:scale(0.97);}
+
+::-webkit-scrollbar{width:0;}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+input[type=number]{-moz-appearance:textfield;}
+.fade-in{animation:fi .35s ease forwards;}
+@keyframes fi{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body class="light">
+<div id="app"></div>
+
+<script>
+// ── PIXEL ART ENGINE ──────────────────────────────────────
+const _ = null;
+const K = '#1a1a1a';
+const W = '#ffffff';
+
+const firePal  = {K,W,o:'#FF6B00',y:'#FFD200',r:'#FF3B00',h:'#FFEC6E'};
+const stopPal  = {K,W,r:'#FF3B2F',p:'#CC2A20'};
+const musclePal= {K,W,s:'#F5A623',b:'#E8900F',h:'#FFD080'};
+const housePal = {K,W,r:'#87CEEB',y:'#FFCC00',b:'#4A90D9',d:'#8B5E3C',w:'#F5F0E8'};
+const beakerPal= {K,W,b:'#4A90D9',l:'#7EC8FF',g:'#E8F4FF',bub:'#FFCC00'};
+const timerPal = {K,W,f:'#F5F0E8',y:'#FFCC00',h:'#E8E4DC'};
+const personPal= {K,W,s:'#F5A623',p:'#FF3B2F',b:'#0064D2',sh:'#E8900F'};
+const bowlPal  = {K,W,r:'#FF3B2F',w2:'#F5F0E8',y:'#FFCC00',g:'#34C759',br:'#8B5E3C',s:'#E8E4DC'};
+const gearPal  = {K,W,g:'#888780',l:'#B4B2A9',d:'#5F5E5A',h:'#D3D1C7'};
+
+const FIRE_G=[
+  [_,_,_,_,'K','K',_,_,_,_,_,_],
+  [_,_,_,'K','o','r','K',_,_,_,_,_],
+  [_,_,'K','o','o','r','o','K',_,_,_,_],
+  [_,'K','o','y','o','o','r','r','K',_,_,_],
+  ['K','o','y','y','y','o','o','r','o','K',_,_],
+  ['K','o','h','y','y','y','o','o','o','K',_,_],
+  ['K','o','y','h','y','y','y','o','o','K',_,_],
+  ['K','o','o','y','h','y','y','o','K',_,_,_],
+  [_,'K','o','o','y','y','o','o','K',_,_,_],
+  [_,'K','o','y','y','y','o','K',_,_,_,_],
+  [_,_,'K','o','h','o','K',_,_,_,_,_],
+  [_,_,_,'K','o','K',_,_,_,_,_,_],
+];
+const STOP_G=[
+  [_,_,'K','K','K','K','K','K',_,_],
+  [_,'K','r','r','r','r','r','r','K',_],
+  ['K','r','r','p','p','p','p','r','r','K'],
+  ['K','r','p','W','W','W','W','p','r','K'],
+  ['K','r','p','W','W','W','W','p','r','K'],
+  ['K','r','r','p','p','p','p','r','r','K'],
+  [_,'K','r','r','r','r','r','r','K',_],
+  [_,_,'K','K','K','K','K','K',_,_],
+];
+const MUSCLE_G=[
+  [_,_,_,'K','K',_,_,_,_,_,_,_],
+  [_,_,'K','s','s','K',_,_,_,_,_,_],
+  [_,'K','s','h','s','s','K',_,_,_,_,_],
+  [_,'K','s','s','s','s','K',_,'K','K',_,_],
+  ['K','s','s','s','s','s','s','K','s','s','K',_],
+  ['K','s','h','s','s','s','s','s','s','s','K',_],
+  ['K','s','s','s','s','s','s','s','s','b','K',_],
+  [_,'K','s','s','s','s','s','s','s','K',_,_],
+  [_,'K','b','s','s','s','s','b','K',_,_,_],
+  [_,_,'K','K','K','K','K',_,_,_,_,_],
+];
+const HOUSE_G=[
+  [_,_,_,_,_,'K',_,_,_,_,_,_],
+  [_,_,_,_,'K','r','K',_,_,_,_,_],
+  [_,_,_,'K','r','r','r','K',_,_,_,_],
+  [_,_,'K','r','r','r','r','r','K',_,_,_],
+  [_,'K','r','r','r','r','r','r','r','K',_,_],
+  ['K','r','r','r','r','r','r','r','r','r','K',_],
+  [_,'K','K','y','y','y','y','y','K','K',_,_],
+  [_,_,'K','w','w','w','w','w','K',_,_,_],
+  [_,_,'K','w','b','w','b','w','K',_,_,_],
+  [_,_,'K','w','b','w','b','w','K',_,_,_],
+  [_,_,'K','w','d','d','d','w','K',_,_,_],
+  [_,_,'K','w','d','d','d','w','K',_,_,_],
+  [_,_,'K','K','K','K','K','K','K',_,_,_],
+];
+const BEAKER_G=[
+  [_,'K','K','K','K','K',_,_,_,_],
+  [_,'K','l','l','l','K',_,_,_,_],
+  [_,'K','g','g','g','K',_,_,_,_],
+  [_,'K','g','g','g','K',_,_,_,_],
+  ['K','g','g','g','g','g','K',_,_,_],
+  ['K','g','g','bub','g','g','K',_,_,_],
+  ['K','b','b','b','b','b','K',_,_,_],
+  ['K','b','l','b','b','b','K',_,_,_],
+  ['K','b','b','bub','b','b','K',_,_,_],
+  ['K','b','b','b','l','b','K',_,_,_],
+  [_,'K','b','b','b','K',_,_,_,_],
+  [_,_,'K','K','K',_,_,_,_,_],
+];
+const TIMER_G=[
+  [_,_,'K','K','K','K','K',_,_,_,_,_],
+  [_,'K','f','f','f','f','f','K',_,_,_,_],
+  [_,'K','f','f','y','f','f','K',_,_,_,_],
+  ['K','f','f','f','y','f','f','f','K',_,_,_],
+  ['K','f','f','f','K','K','f','f','K',_,_,_],
+  ['K','f','f','f','f','K','f','f','K',_,_,_],
+  ['K','f','f','f','f','f','f','f','K',_,_,_],
+  [_,'K','f','h','f','f','h','K',_,_,_,_],
+  [_,'K','f','f','f','f','f','K',_,_,_,_],
+  [_,_,'K','K','K','K','K',_,_,_,_,_],
+];
+const WALK_G=[
+  [_,_,'K','K',_,_,_,_,_,_],
+  [_,'K','s','s','K',_,_,_,_,_],
+  [_,'K','s','s','K',_,_,_,_,_],
+  [_,_,'K','K',_,_,_,_,_,_],
+  [_,'K','p','p','p','K',_,_,_,_],
+  ['K','p','p','p','p','p','K',_,_,_],
+  [_,'K','p','p','p','K',_,_,_,_],
+  [_,_,'K','b','K',_,'K',_,_,_],
+  [_,'K','b','b','K','K','b','K',_,_],
+  [_,'K','b','b',_,_,'b','K',_,_],
+  [_,'K','b','K',_,_,'K','K',_,_],
+  [_,'K','K',_,_,_,_,'K',_,_],
+];
+const RUN_G=[
+  [_,_,_,'K','K',_,_,_,_,_],
+  [_,_,'K','s','s','K',_,_,_,_],
+  [_,_,'K','s','s','K',_,_,_,_],
+  [_,_,_,'K','K',_,_,_,_,_],
+  [_,_,'K','p','p','K',_,_,_,_],
+  [_,'K','p','p','p','p','K',_,_,_],
+  ['K','p','p','p','K',_,_,_,_,_],
+  [_,_,'K','b','K','K',_,_,_,_],
+  [_,'K','b','b',_,'K','b','K',_,_],
+  ['K','b',_,_,_,_,'b','K',_,_],
+  ['K','K',_,_,_,_,'K',_,_,_],
+];
+const BOWL_G=[
+  [_,_,'K','y','y','y','y','K',_,_,_,_],
+  [_,'K','y','K','K','K','K','y','K',_,_,_],
+  [_,'K','w2','r','r','r','r','w2','K',_,_,_],
+  ['K','w2','w2','g','r','r','g','w2','w2','K',_,_],
+  ['K','w2','w2','w2','w2','w2','w2','w2','w2','K',_,_],
+  ['K','s','s','s','s','s','s','s','s','K',_,_],
+  [_,'K','s','s','s','s','s','s','K',_,_,_],
+  [_,_,'K','K','s','s','K','K',_,_,_,_],
+  [_,_,_,_,'K','K',_,_,_,_,_,_],
+];
+
+const bookPal = {K:'#1a1a1a', g:'#2EA04C', d:'#1B6B2E', W:'#F5F0E8', l:'#5CB87C', s:'#0d4a1e'};
+const BOOK_G = [
+  [_,_,'K','K','K','K','K','K','K','K',_,_],
+  [_,'K','s','s','d','g','g','g','g','d','K',_],
+  ['K','s','s','s','W','W','W','W','W','d','g','K'],
+  ['K','s','s','s','W','g','g','g','W','d','g','K'],
+  ['K','s','s','s','W','g','l','g','W','d','g','K'],
+  ['K','s','s','s','W','g','g','g','W','d','g','K'],
+  ['K','s','s','s','W','g','l','g','W','d','g','K'],
+  ['K','s','s','s','W','g','g','g','W','d','g','K'],
+  ['K','s','s','s','W','W','W','W','W','d','g','K'],
+  [_,'K','s','s','d','g','g','g','g','d','K',_],
+  [_,_,'K','K','K','K','K','K','K','K',_,_],
+];
+
+const toolsPal2 = {K:'#1a1a1a', g:'#999', l:'#ccc', h:'#eee', br:'#7a4a1e', brl:'#c4956a', brh:'#e8c89a'};
+const TOOLS_G = [
+  ['br','br','br','K',_,_,_,_,'K','g','g','K'],
+  ['br','brl','brl','br',_,_,_,'K','l','l','K',_],
+  ['K','br','br','K',_,_,_,'K','g','K',_,_],
+  [_,'K','br',_,_,_,'K','g',_,_,_,_],
+  [_,_,'K','br',_,'K','g',_,_,_,_,_],
+  [_,_,_,'K','K','br','K',_,_,_,_,_],
+  [_,_,_,'g','K','K','br',_,_,_,_,_],
+  [_,_,'g','l',_,_,'K','br',_,_,_,_],
+  [_,'g','l','K',_,_,_,'br','brl',_,_,_],
+  ['g','l','K',_,_,_,_,'K','brl','br',_,_],
+  ['K','K',_,_,_,_,_,_,'K','br','K',_],
+  [_,_,_,_,_,_,_,_,_,'K','K',_],
+];
+
+// 초승달 + 별 (다크모드 전환 버튼)
+const moonPal = {m:'#FFE566', ml:'#FFF8B0', s:'#FFFFFF', sd:'#E0E0FF'};
+const MOON_G = [
+  [_,_,_,'m','m','m',_,'s',_,_],
+  [_,_,'m','ml','ml',_,'s','sd','s',_],
+  [_,'m','ml','ml',_,_,'s',_,_,_],
+  ['m','ml','ml',_,_,_,_,_,_,_],
+  ['m','ml','ml',_,_,_,_,_,_,_],
+  ['m','ml','ml',_,_,_,_,_,_,_],
+  [_,'m','ml','ml',_,_,_,_,_,_],
+  [_,_,'m','ml','ml',_,_,_,'s',_],
+  [_,_,_,'m','m','m',_,'s','sd','s'],
+  [_,_,_,_,_,_,_,_,'s',_],
+];
+
+// 태양 (라이트모드 전환 버튼)
+const sunPal2 = {y:'#FFD700', o:'#FFA500', w:'#FFF9C4', r:'#FF8C00'};
+const SUN_G2 = [
+  [_,'y',_,_,_,'y',_,_,'y',_],
+  [_,_,'r',_,'r',_,'y',_,_,_],
+  ['y',_,'o','o','o',_,_,'y',_,_],
+  [_,'r','o','w','o','r',_,_,_,_],
+  ['y',_,'o','w','o',_,_,'y',_,_],
+  [_,'r','o','o','o','r',_,_,_,_],
+  [_,_,_,'r',_,'r',_,'y',_,_],
+  ['y',_,_,_,'y',_,_,_,'y',_],
+];
+const GEAR_G=[
+  [_,_,'K','K',_,'K','K',_,_,_,_,_],
+  [_,_,'K','g','K','g','K',_,_,_,_,_],
+  [_,'K','g','g','g','g','g','K',_,_,_,_],
+  ['K','g','l','g','K','g','l','g','K',_,_,_],
+  ['K','g','g','K',_,'K','g','g','K',_,_,_],
+  ['K','g','l','K',_,'K','l','g','K',_,_,_],
+  ['K','g','g','K',_,'K','g','g','K',_,_,_],
+  [_,'K','g','g','g','g','g','K',_,_,_,_],
+  [_,_,'K','g','K','g','K',_,_,_,_,_],
+  [_,_,'K','K',_,'K','K',_,_,_,_,_],
+];
+
+function pxSvg(grid, palette, sz=3) {
+  const rows=grid.length, cols=grid[0].length;
+  const w=cols*sz, h=rows*sz;
+  let s=`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" style="display:block;image-rendering:pixelated;shape-rendering:crispEdges;">`;
+  for(let r=0;r<rows;r++) for(let c=0;c<cols;c++){
+    const v=grid[r][c];
+    if(v!==null&&v!==undefined){
+      const col=palette[v]||v;
+      if(col) s+=`<rect x="${c*sz}" y="${r*sz}" width="${sz}" height="${sz}" fill="${col}"/>`;
+    }
+  }
+  return s+'</svg>';
+}
+
+// Precompute SVGs
+const PX = {
+  fire:  pxSvg(FIRE_G,  firePal,  3),
+  stop:  pxSvg(STOP_G,  stopPal,  4),
+  muscle:pxSvg(MUSCLE_G,musclePal,3),
+  house: pxSvg(HOUSE_G, housePal, 3),
+  beaker:pxSvg(BEAKER_G,beakerPal,4),
+  timer: pxSvg(TIMER_G, timerPal, 4),
+  walk:  pxSvg(WALK_G,  personPal,4),
+  run:   pxSvg(RUN_G,   personPal,4),
+  bowl:  pxSvg(BOWL_G,  bowlPal,  3),
+  gear:  pxSvg(GEAR_G,  gearPal,  4),
+  book:  pxSvg(BOOK_G,  bookPal,  4),
+  tools: pxSvg(TOOLS_G, toolsPal2,4),
+  moon:  pxSvg(MOON_G,   moonPal,  5),
+  sun2:  pxSvg(SUN_G2,   sunPal2,  4),
+};
+
+// ── DATA ──────────────────────────────────────────────────
+const FOODS=[
+  {id:'korean', label:'한식', emoji:'🍚', base:2.5},
+  {id:'chinese',label:'중식', emoji:'🥢', base:2.5},
+  {id:'western',label:'양식', emoji:'🍝', base:2.0},
+  {id:'noodles',label:'면류', emoji:'🍜', base:3.5},
+  {id:'bread',  label:'빵',   emoji:'🥐', base:3.0},
+  {id:'fruit',  label:'과일', emoji:'🍎', base:1.5},
+  {id:'diet',   label:'다이어트',emoji:'🥤',base:0.5},
+  {id:'alcohol',label:'음주', emoji:'🍺', base:3.5},
+];
+const EXERCISES=[
+  {id:'walk', label:'걷기',    emoji:'🚶', red:0.3},
+  {id:'run',  label:'달리기',  emoji:'🏃', red:0.5},
+  {id:'cycle',label:'사이클',  emoji:'🚴', red:0.5},
+  {id:'gym',  label:'헬스',   emoji:'🏋️', red:0.4},
+  {id:'yoga', label:'요가',   emoji:'🧘', red:0.2},
+  {id:'swim', label:'수영',   emoji:'🏊', red:0.5},
+  {id:'sport',label:'구기종목',emoji:'⚽', red:0.4},
+  {id:'other',label:'기타',   emoji:'💪', red:0.3},
+];
+const SCIENCE=[
+  {id:1,claim:'공복 운동이 지방을 더 태운다',dot:'#34C759',
+   summary:'공복 상태에서 유산소 운동은 식후 대비 지방 산화가 약 3.08g 더 증가합니다.',
+   level:'메타분석 | 27개 RCT, 273명',
+   source:'Vieira et al., British Journal of Nutrition (2016)',
+   url:'https://doi.org/10.1017/S0007114516003160'},
+  {id:2,claim:'식후 인슐린이 지방 연소를 억제한다',dot:'#34C759',
+   summary:'식후 인슐린은 지방분해(lipolysis)를 억제하고 포도당 산화를 증가시킵니다.',
+   level:'실험 연구 | Frontiers in Physiology 2025',
+   source:'Guerreiro et al., Frontiers in Physiology (2025)',
+   url:'https://doi.org/10.3389/fphys.2025.1721312'},
+  {id:3,claim:'공복 운동이 24시간 지방 산화를 높인다',dot:'#34C759',
+   summary:'공복 상태 운동은 24시간 누적 지방 산화량을 유의미하게 증가시킵니다.',
+   level:'실험 연구 | 전신대사 측정',
+   source:'Iwayama et al., Nutrients (2023)',
+   url:'https://doi.org/10.3390/nu15051109'},
+  {id:4,claim:'탄수화물이 인슐린 반응을 더 높인다',dot:'#FFCC00',
+   summary:'고GI 식사는 저GI 식사 대비 2시간 이내 인슐린 AUC가 약 2배 높습니다.',
+   level:'RCT | 12명, 4가지 식사 조건',
+   source:'Bjørnshave et al., NCBI (2016)',
+   url:'https://pmc.ncbi.nlm.nih.gov/articles/PMC1569855/'},
+  {id:5,claim:'간헐적 단식이 체지방·인슐린을 줄인다',dot:'#34C759',
+   summary:'간헐적 단식은 체지방, 허리둘레, 공복 인슐린을 유의미하게 감소시킵니다.',
+   level:'우산형 메타분석 | The Lancet 2024',
+   source:'Cienfuegos et al., eClinicalMedicine (2024)',
+   url:'https://doi.org/10.1016/j.eclinm.2024.102519'},
+  {id:6,claim:'음식 종류로 인슐린 반응 예측 (단, 한계 있음)',dot:'#FFCC00',
+   summary:'GI, GL, 탄수화물이 주요 예측 인자이나 영양 성분만으로 변동의 50%만 설명됩니다.',
+   level:'147개 식품 분석',
+   source:'Bao et al., Nutrients (2016)',
+   url:'https://doi.org/10.3390/nu8040210'},
+];
+
+// ── APP STATE ─────────────────────────────────────────────
+let S = {
+  screen:'onboard', obStep:0, theme:'light',
+  profile:{age:30,gender:'male',height:170,weight:70,exFreq:3,sleep:7},
+  lastMeal:null, lastEx:null, sheet:null,
+  alarms:{doTime:true,fasting14:true,fasting16:false,mealRemind:true},
+  sciOpen:{},
+  now:Date.now(),
+  sf:{foodType:'korean',qty:'normal',mealTime:'',exType:'walk',intensity:'light',exTime:''},
+};
+
+// ── HELPERS ───────────────────────────────────────────────
+// 공복 타이머: 시:분 표기
+const fmtHM = ms => {
+  if(!ms||ms<0) return '--:--';
+  const totalSec=Math.floor(ms/1000);
+  const h=Math.floor(totalSec/3600), m=Math.floor((totalSec%3600)/60);
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+};
+// DO 카운트다운: 시간>1h면 "Xh Xm", 아니면 "Xm Xs" 형태로 반환
+const fmtCountdown = ms => {
+  if(!ms||ms<0) return {primary:'00:00', unit:'분:초', h:0, m:0, s:0};
+  const totalSec=Math.floor(ms/1000);
+  const h=Math.floor(totalSec/3600);
+  const m=Math.floor((totalSec%3600)/60);
+  const s=totalSec%60;
+  if(h>0){
+    return {primary:`${h}시간 ${String(m).padStart(2,'0')}분`, unit:'남음', h,m,s};
+  }
+  return {primary:`${String(m).padStart(2,'0')}분 ${String(s).padStart(2,'0')}초`, unit:'남음', h,m,s};
+};
+// 하위 호환용
+const fmtMM = ms => {
+  if(!ms||ms<0) return '00:00';
+  const totalSec=Math.floor(ms/1000);
+  const m=Math.floor(totalSec/60), s=totalSec%60;
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+};
+const nowT = () => {
+  const d=new Date();
+  return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+};
+const applyTheme = () => {
+  document.body.className = S.theme;
+};
+
+function calcState() {
+  if(!S.lastMeal) return {state:'DO',msRemain:0,fastMs:0,first:true};
+  const mealMs = new Date(S.lastMeal.time).getTime();
+  const sinceMs = S.now - mealMs;
+  const f = FOODS.find(x=>x.id===S.lastMeal.foodType)||FOODS[0];
+  let base = f.base * 3600000;
+  if(S.lastMeal.qty==='small') base -= 18*60000;
+  if(S.lastMeal.qty==='large') base += 30*60000;
+  const age = parseInt(S.profile.age)||30;
+  if(age>=50) base+=45*60000; else if(age>=40) base+=30*60000;
+  const h=parseInt(S.profile.height)||170, w=parseInt(S.profile.weight)||70;
+  const bmi = w/((h/100)**2);
+  if(bmi>=30) base+=60*60000; else if(bmi>=25) base+=30*60000;
+  const ef = parseInt(S.profile.exFreq)||3;
+  if(ef>=4) base-=30*60000; else if(ef<=1) base+=20*60000;
+  if(S.lastEx) {
+    const exMs = new Date(S.lastEx.time).getTime();
+    if(S.now - exMs < 7200000) {
+      const e = EXERCISES.find(x=>x.id===S.lastEx.type)||EXERCISES[0];
+      const mult = S.lastEx.intensity==='hard'?1.5:S.lastEx.intensity==='moderate'?1.0:0.6;
+      base -= e.red * 3600000 * mult;
+    }
+  }
+  base = Math.max(1800000, base);
+  const remain = base - sinceMs;
+  return {state:remain>0?'DONT':'DO', msRemain:Math.max(0,remain), fastMs:sinceMs};
+}
+
+// ── RENDER ────────────────────────────────────────────────
+function render() {
+  applyTheme();
+  const app = document.getElementById('app');
+  const _addFade = !document.querySelector('.screen');
+  const _sc = _addFade ? 'screen fade-in' : 'screen';
+  const st = calcState();
+  const isDo = st.state === 'DO';
+  const fastH = st.fastMs / 3600000;
+  const ms12=43200000, ms14=50400000, ms16=57600000;
+  const d12=st.fastMs>=ms12, d14=st.fastMs>=ms14, d16=st.fastMs>=ms16;
+  const toNext = d14?(d16?0:ms16-st.fastMs):(ms14-st.fastMs);
+  const ac = isDo?'#34C759':'#FF3B2F';
+  const t = S.theme;
+
+  let html = '';
+
+  // ONBOARD
+  if(S.screen==='onboard') {
+    if(S.obStep===0) html += `
+    <div class="${_sc}">
+    <div class="ob-wrap" style="position:relative;">
+      <button class="theme-tog" onclick="toggleTheme()" style="position:absolute;top:16px;right:16px;">${t==='light'?'🌙':'🌞'}</button>
+      <div class="ob-logo" style="color:${ac};">DOD</div>
+      <div class="ob-tag">DO OR DON'T · 닷</div>
+      <div class="ob-title">지금이 지방 태우기<br>좋은 타이밍일까?</div>
+      <div class="ob-desc">식후 20~30분 가벼운 운동은 혈당 스파이크를 억제해요. 하지만 지방을 본격적으로 태우려면 <strong>타이밍</strong>이 중요해요. DOD는 식사·운동·신체 조건을 분석해서 지금이 지방 분해에 최적인 순간인지 <strong>DO</strong> 또는 <strong>DON'T</strong> 로 알려드려요.</div>
+      <div class="disclaimer-box">
+        <strong>⚠️ 반드시 읽어주세요</strong>
+        <p>개인의 대사 반응에는 차이가 있으며, DOD의 추정은 일반적인 생리학 원리를 기반으로 한 참고 정보입니다. 혈당 및 인슐린 수치를 직접 측정하지 않으며, 의학적 진단·치료 목적으로 사용하지 마세요.</p>
+      </div>
+      <button class="ob-cta green" onclick="nextOb()">동의하고 시작하기</button>
+    </div></div>`;
+
+    if(S.obStep===1) html += `
+    <div class="${_sc}">
+    <div class="ob-wrap">
+      <div style="font-family:'Space Mono',monospace;font-size:.78rem;color:var(--muted);margin-bottom:1.5rem;letter-spacing:.08em;">STEP 1 / 2</div>
+      <div class="ob-title">신체 정보 입력</div>
+      <div class="ob-desc" style="margin-bottom:1.5rem;">정확한 추정을 위해 딱 한 번만 입력하면 돼요.</div>
+      <span class="ob-label">나이</span>
+      <input type="number" id="f-age" value="${S.profile.age}" placeholder="나이" oninput="S.profile.age=parseInt(this.value)||S.profile.age">
+      <span class="ob-label">성별</span>
+      <div class="seg" style="margin-bottom:1.2rem;">
+        <button class="seg-btn ${S.profile.gender==='male'?'act-b':''}" onclick="setGender('male')">남성</button>
+        <button class="seg-btn ${S.profile.gender==='female'?'act-r':''}" onclick="setGender('female')">여성</button>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <div style="flex:1;"><span class="ob-label">키 (cm)</span><input type="number" id="f-height" value="${S.profile.height}" oninput="S.profile.height=parseInt(this.value)||S.profile.height"></div>
+        <div style="flex:1;"><span class="ob-label">체중 (kg)</span><input type="number" id="f-weight" value="${S.profile.weight}" oninput="S.profile.weight=parseInt(this.value)||S.profile.weight"></div>
+      </div>
+      <button class="ob-cta green" onclick="saveBody()">다음</button>
+    </div></div>`;
+
+    if(S.obStep===2) html += `
+    <div class="${_sc}">
+    <div class="ob-wrap">
+      <div style="font-family:'Space Mono',monospace;font-size:.78rem;color:var(--muted);margin-bottom:1.5rem;letter-spacing:.08em;">STEP 2 / 2</div>
+      <div class="ob-title">생활 습관</div>
+      <div class="ob-desc" style="margin-bottom:1.5rem;">평소 운동량에 따라 추정 시간이 달라져요.</div>
+      <span class="ob-label">주당 운동 횟수</span>
+      <div class="seg" style="margin-bottom:1.5rem;">
+        <button class="seg-btn ${S.profile.exFreq<=1?'act-r':''}" onclick="setEx(1)">거의 안함</button>
+        <button class="seg-btn ${S.profile.exFreq>=2&&S.profile.exFreq<=3?'act-g':''}" onclick="setEx(2)">주 2~3회</button>
+        <button class="seg-btn ${S.profile.exFreq>=4?'act-g':''}" onclick="setEx(4)">주 4회+</button>
+      </div>
+      <span class="ob-label">평균 수면 시간</span>
+      <div class="seg" style="margin-bottom:2rem;">
+        <button class="seg-btn ${S.profile.sleep<=6?'act-r':''}" onclick="setSleep(6)">6시간 미만</button>
+        <button class="seg-btn ${S.profile.sleep===7?'act-g':''}" onclick="setSleep(7)">6~8시간</button>
+        <button class="seg-btn ${S.profile.sleep>=8?'act-g':''}" onclick="setSleep(8)">8시간+</button>
+      </div>
+      <button class="ob-cta green" onclick="finishOb()">DOD 시작하기 🔥</button>
+    </div></div>`;
+  }
+
+  // MAIN
+  if(S.screen==='main') {
+    const fastPct = Math.min(100,(fastH/16)*100);
+    html += `
+    <div class="${_sc}" style="padding-bottom:0;">
+      <div class="hdr">
+        <div class="logo"><span style="color:#FF3B2F;">D</span><span style="color:#FFCC00;">O</span><span style="color:#34C759;">D</span></div>
+        <div id="hdr-clock" style="display:flex;flex-direction:column;align-items:center;gap:1px;"></div>
+        <button class="theme-tog" onclick="toggleTheme()">${t==='light'?'🌙':'🌞'}</button>
+      </div>
+
+      <div class="st-card" style="background:${isDo?'#34C759':'#FF3B2F'};">
+        <div class="st-bubble"></div>
+        <div class="st-eyebrow" style="color:${isDo?'rgba(0,0,0,.4)':'rgba(255,255,255,.45)'};">STATUS</div>
+        <div class="st-word" style="font-size:${isDo?'64px':'42px'};color:#fff;">${isDo?'DO':"DON'T"}</div>
+        <div class="st-badge">
+          <div>${isDo?PX.fire:PX.stop}</div>
+          <span class="st-badge-txt">${isDo?'지방 분해 중':'지방 저장 중'}</span>
+        </div>
+      </div>
+
+      ${(()=>{
+        if(isDo){
+          // DO 상태: 공복 타이머 (노랑)
+          const fastPct2=Math.min(100,(fastH/16)*100);
+          return `<div class="fast-card yellow">
+            <div class="fc-lbl">공복 시간</div>
+            <div id="fast-hm" class="fc-val">${fmtHM(st.fastMs)}</div>
+            <div class="fc-sub">${S.lastMeal?`마지막 식사 ${new Date(S.lastMeal.time).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})} 이후`:'식사를 기록해주세요'}</div>
+            ${S.lastMeal?`<div class="fc-bar"><div class="fc-fill" style="width:${fastPct2}%"></div></div>
+            <div class="fc-labels"><span>0h</span><span class="mid">14h — ${toNext>0?Math.ceil(toNext/60000)+'분!':'달성!'}</span><span>16h</span></div>
+            <div class="fc-chips">
+              <span class="chip ${d12?'done':'todo'}">${d12?'✓':'○'} 12h</span>
+              <span class="chip ${d14?'done':toNext>0?'next':'todo'}">${d14?'✓ 14h':toNext>0?`⏱ ${Math.ceil(toNext/60000)}분`:'○ 14h'}</span>
+              <span class="chip ${d16?'done':'todo'}">${d16?'✓':'○'} 16h</span>
+            </div>`:''}
+          </div>`;
+        } else {
+          // DON'T 상태: DO까지 카운트다운 (주황)
+          const cd=fmtCountdown(st.msRemain);
+          return `<div class="fast-card yellow" style="border-color:var(--bk);box-shadow:3px 3px 0 var(--bk);">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px;">
+              <div class="fc-lbl">DO까지 남은 시간</div>
+              
+            </div>
+            <div id="cd-primary" class="fc-val" style="color:#00E676;font-size:28px;font-weight:900;white-space:nowrap;text-shadow:2px 2px 0 rgba(0,0,0,.25),0 0 12px rgba(0,230,118,.6),0 0 24px rgba(0,230,118,.3);letter-spacing:.02em;">${cd.primary}</div>
+            <div style="margin-top:10px;display:flex;gap:7px;flex-wrap:nowrap;align-items:stretch;">
+              <div style="background:rgba(0,0,0,.12);border-radius:8px;padding:6px 10px;">
+                <div style="font-size:16px;font-weight:700;color:rgba(0,0,0,.42);letter-spacing:.1em;margin-bottom:2px;">시간</div>
+                <div id="cd-h" style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:#000;text-shadow:1px 1px 0 rgba(0,0,0,.2);">${String(cd.h).padStart(2,'0')}</div>
+              </div>
+              <div style="background:rgba(0,0,0,.12);border-radius:8px;padding:6px 10px;">
+                <div style="font-size:16px;font-weight:700;color:rgba(0,0,0,.42);letter-spacing:.1em;margin-bottom:2px;">분</div>
+                <div id="cd-m" style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:#000;text-shadow:1px 1px 0 rgba(0,0,0,.2);">${String(cd.m).padStart(2,'0')}</div>
+              </div>
+              <div style="background:rgba(0,0,0,.12);border-radius:8px;padding:6px 10px;">
+                <div style="font-size:16px;font-weight:700;color:rgba(0,0,0,.42);letter-spacing:.1em;margin-bottom:2px;">초</div>
+                <div id="cd-s" style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:#000;text-shadow:1px 1px 0 rgba(0,0,0,.2);">${String(cd.s).padStart(2,'0')}</div>
+              </div>
+              <div style="background:rgba(120,60,220,.12);border-radius:10px;padding:8px 12px;border:1.5px solid rgba(160,80,255,.4);margin-left:auto;flex:1;display:flex;flex-direction:column;justify-content:center;align-self:stretch;">
+                <div style="font-size:16px;font-weight:700;color:rgba(120,60,220,.7);letter-spacing:.1em;margin-bottom:2px;">공복 경과</div>
+                <div id="dont-fast-hm" style="font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#a050ff;text-shadow:0 0 10px rgba(160,80,255,.75),0 0 20px rgba(160,80,255,.4);letter-spacing:.04em;">${S.lastMeal?fmtHM(st.fastMs):'--:--'}</div>
+              </div>
+            </div>
+          </div>`;
+        }
+      })()}
+
+      <div class="msg-card">
+        <div class="msg-icon-wrap" style="background:${isDo?'#34C759':'#FFCC00'};">
+          ${isDo?PX.muscle:PX.walk}
+        </div>
+        <div>
+          <div class="msg-title">${isDo?'지금 안 움직이면 기회 손실':'지금은 가볍게 걷기'}</div>
+          <div class="msg-sub">${isDo?'인슐린 OFF — 지방이 연료가 되는 최적의 타이밍':'걸을수록 DON'T 시간이 줄어들어요'}</div>${isDo?'<div style="font-size:11px;color:#FF6B00;margin-top:4px;font-weight:600;">당뇨 환자는 공복 운동 전 의료진 상담 필수</div>':''}
+        </div>
+      </div>
+
+      <div class="act-row">
+        <div class="act-btn red" onclick="openSheet('meal')">
+          <div class="act-inner">${PX.bowl}<span class="act-txt">식사 기록</span></div>
+        </div>
+        <div class="act-btn blue" onclick="openSheet('exercise')">
+          <div class="act-inner">${PX.run}<span class="act-txt">운동 기록</span></div>
+        </div>
+      </div>
+
+      <div class="nav">
+        <button class="nav-btn" style="background:#64B5F6;" onclick="goScreen('main')">${PX.house}</button>
+        <button class="nav-btn inactive" onclick="goScreen('science')">${PX.book}</button>
+        <button class="nav-btn inactive" onclick="goScreen('settings')">${PX.tools}</button>
+      </div>
+    </div>`;
+  }
+
+  // SCIENCE
+  if(S.screen==='science') {
+    html += `<div class="${_sc}" style="padding-bottom:2rem;">
+      <div class="hdr">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button class="back-btn" onclick="goScreen('main')">←</button>
+          <div class="page-title">과학적 근거</div>
+        </div>
+        <button class="theme-tog" onclick="toggleTheme()">${t==='light'?'🌙':'🌞'}</button>
+      </div>
+      <div style="height:8px;"></div>
+      <div class="disclaimer-box">
+        <strong>⚠️ 참고 사항</strong>
+        <p>개인의 대사 반응에는 차이가 있으며, DOD의 추정은 일반적인 생리학 원리를 기반으로 한 참고 정보입니다. 혈당 및 인슐린 수치를 직접 측정하지 않습니다.</p><p style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,149,0,.25);"><strong style="color:#FF6B00;">⚠️ 당뇨 환자 주의</strong> — 공복 운동 시 저혈당 쇼크 위험이 있습니다. 당뇨 또는 혈당 조절 약물을 복용 중이라면 반드시 의료진과 상담 후 이용하세요.</p>
+      </div>
+      ${SCIENCE.map(sci=>`
+      <div class="sci-item">
+        <div class="sci-hd" onclick="toggleSci(${sci.id})">
+          <div class="sci-dot" style="background:${sci.dot};border-color:${sci.dot};"></div>
+          <div class="sci-claim">${sci.claim}</div>
+          <div class="sci-chev ${S.sciOpen[sci.id]?'open':''}">▼</div>
+        </div>
+        ${S.sciOpen[sci.id]?`<div class="sci-body sci-body-bg">
+          <div class="sci-sum">${sci.summary}</div>
+          <div class="sci-level">📊 ${sci.level}</div>
+          <div class="sci-src">출처: <a href="${sci.url}" target="_blank">${sci.source} ↗</a></div>
+        </div>`:''}
+      </div>`).join('')}
+      <div class="nav">
+        <button class="nav-btn inactive" onclick="goScreen('main')">${PX.house}</button>
+        <button class="nav-btn" style="background:#4A90D9;" onclick="goScreen('science')">${PX.book}</button>
+        <button class="nav-btn inactive" onclick="goScreen('settings')">${PX.tools}</button>
+      </div>
+    </div>`;
+  }
+
+  // SETTINGS
+  if(S.screen==='settings') {
+    const al = S.alarms;
+    html += `<div class="${_sc}" style="padding-bottom:2rem;">
+      <div class="hdr">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button class="back-btn" onclick="goScreen('main')">←</button>
+          <div class="page-title">설정</div>
+        </div>
+        <button class="theme-tog" onclick="toggleTheme()">${t==='light'?'🌙':'🌞'}</button>
+      </div>
+      <div style="height:10px;"></div>
+      <div style="padding:0 16px 7px;font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:.12em;color:#aaa;">공복 알람</div>
+      ${setRow(PX.timer,'#FFCC00','14h 공복 달성','간헐적 단식 14h 알림','fasting14')}
+      ${setRow(PX.fire,'#FF8C00','16h 공복 달성','16:8 단식 완료 알림','fasting16')}
+      <div style="height:6px;"></div>
+      <div style="padding:0 16px 7px;font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:.12em;color:#aaa;">DO 알람</div>
+      ${setRow(PX.muscle,'#34C759','DO 타임 시작','지방 분해 타이밍 알림','doTime')}
+      ${setRow(PX.bowl,'#FF3B2F','식사 기록 독촉','마지막 기록 4시간 후','mealRemind')}
+      <div style="height:6px;"></div>
+      <div style="padding:0 16px 7px;font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:.12em;color:#aaa;">신체 정보</div>
+      <div class="set-row" style="cursor:pointer;" onclick="goOb()">
+        <div class="set-left">
+          <div class="set-icon-box" style="background:#FFCC00;">${PX.timer}</div>
+          <div><div class="set-name">신체 정보 수정</div><div class="set-desc">${S.profile.age}세 · ${S.profile.height}cm · ${S.profile.weight}kg</div></div>
+        </div>
+        <span style="color:#aaa;font-size:16px;">›</span>
+      </div>
+      <div style="height:6px;"></div>
+      <div style="padding:0 16px 7px;font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:.12em;color:#aaa;">법적 고지</div>
+      <div class="set-row">
+        <div class="set-left">
+          <div class="set-icon-box" style="background:#FF3B2F;">${PX.stop}</div>
+          <div><div class="set-name">면책 고지</div><div class="set-desc" style="max-width:230px;line-height:1.6;">DOD는 참고용 앱. 인슐린·혈당 직접 측정 없음.<br><span style="color:#FF6B00;font-weight:700;">당뇨 환자 — 공복 운동 시 저혈당 쇼크 위험. 의료진 상담 필수.</span></div></div>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="nav-btn inactive" onclick="goScreen('main')">${PX.house}</button>
+        <button class="nav-btn inactive" onclick="goScreen('science')">${PX.book}</button>
+        <button class="nav-btn" style="background:#888780;" onclick="goScreen('settings')">${PX.tools}</button>
+      </div>
+    </div>`;
+  }
+
+  // SHEETS
+  if(S.sheet) {
+    if(S.sheet==='meal') {
+      const f = FOODS.find(x=>x.id===S.sf.foodType)||FOODS[0];
+      let pb = f.base;
+      if(S.sf.qty==='small') pb-=.3; if(S.sf.qty==='large') pb+=.5;
+      const age=parseInt(S.profile.age)||30; if(age>=40) pb+=.5;
+      const h=parseInt(S.profile.height)||170, w=parseInt(S.profile.weight)||70;
+      const bmi=w/((h/100)**2); if(bmi>=30) pb+=1; else if(bmi>=25) pb+=.5;
+      pb=Math.max(.5,pb);
+      const dt=new Date(Date.now()+pb*3600000);
+      const ds=`${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+      html += `<div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title">식사 기록</div>
+        <div class="sheet-sub">언제 드셨나요?</div>
+        <span class="sec-lbl" style="margin-top:.25rem;">식사 종료 시간</span>
+        <input type="time" id="meal-time" value="${S.sf.mealTime||nowT()}" onchange="S.sf.mealTime=this.value" oninput="S.sf.mealTime=this.value">
+        <span class="sec-lbl">뭘 드셨어요?</span>
+        <div class="food-grid">
+          ${FOODS.map(fd=>`<div class="food-item ${S.sf.foodType===fd.id?'sel-r':''}" onclick="S.sf.foodType='${fd.id}';render()">
+            <span style="font-size:1.4rem;">${fd.emoji}</span>
+            <span class="fi-nm">${fd.label}</span>
+          </div>`).join('')}
+        </div>
+        <span class="sec-lbl">양은요?</span>
+        <div class="qty-row">
+          <button class="qty-btn ${S.sf.qty==='small'?'sel-r':''}" onclick="S.sf.qty='small';render()">조금</button>
+          <button class="qty-btn ${S.sf.qty==='normal'?'sel-r':''}" onclick="S.sf.qty='normal';render()">보통</button>
+          <button class="qty-btn ${S.sf.qty==='large'?'sel-r':''}" onclick="S.sf.qty='large';render()">많이</button>
+        </div>
+        <div class="divider"></div>
+        <div class="preview-box">
+          <div class="pb-lbl">DOD 예측</div>
+          <div class="pb-row"><span class="pb-k">탄수화물 추정</span><span class="pb-v">${f.base>=3?'높음':f.base>=2?'중간':'낮음'}</span></div>
+          <div class="pb-row"><span class="pb-k">지방 분해 타이밍</span><span class="pb-v">약 ${pb.toFixed(1)}시간 후</span></div>
+          <div class="pb-row"><span class="pb-k">DO 타임 예상</span><span class="pb-v g">${ds}</span></div>
+        </div>
+        <button class="sheet-cta red" onclick="saveMeal()" style="margin-bottom:20px;">기록 완료</button>
+      </div>
+      <div class="overlay" onclick="closeSheet()"></div>`;
+    }
+    if(S.sheet==='exercise') {
+      const e = EXERCISES.find(x=>x.id===S.sf.exType)||EXERCISES[0];
+      const mult = S.sf.intensity==='hard'?1.5:S.sf.intensity==='moderate'?1.0:0.6;
+      const redMin = Math.round(e.red*60*mult);
+      html += `<div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title">운동 기록</div>
+        <div class="sheet-sub">어떤 운동을 하셨나요?</div>
+        <span class="sec-lbl" style="margin-top:.25rem;">운동 종료 시간</span>
+        <input type="time" id="ex-time" value="${S.sf.exTime||nowT()}" onchange="S.sf.exTime=this.value" oninput="S.sf.exTime=this.value">
+        <span class="sec-lbl">운동 종류</span>
+        <div class="food-grid">
+          ${EXERCISES.map(ex=>`<div class="food-item ${S.sf.exType===ex.id?'sel-g':''}" onclick="S.sf.exType='${ex.id}';render()">
+            <span style="font-size:1.4rem;">${ex.emoji}</span>
+            <span class="fi-nm">${ex.label}</span>
+          </div>`).join('')}
+        </div>
+        <span class="sec-lbl">강도는요?</span>
+        <div class="qty-row">
+          <button class="qty-btn ${S.sf.intensity==='light'?'sel-g':''}" onclick="S.sf.intensity='light';render()">가볍게</button>
+          <button class="qty-btn ${S.sf.intensity==='moderate'?'sel-g':''}" onclick="S.sf.intensity='moderate';render()">보통</button>
+          <button class="qty-btn ${S.sf.intensity==='hard'?'sel-g':''}" onclick="S.sf.intensity='hard';render()">격하게</button>
+        </div>
+        <div class="divider"></div>
+        <div class="preview-box" style="border-color:#34C759;background:rgba(52,199,89,.1);">
+          <div class="pb-lbl" style="color:#34C759;">DOD 예측</div>
+          ${S.lastMeal?`<div class="pb-row"><span class="pb-k">DO 타임 단축</span><span class="pb-v g">약 ${redMin}분 앞당겨짐</span></div>`:'<div class="pb-row"><span class="pb-k">식사 기록 후 계산 가능</span><span class="pb-v">—</span></div>'}
+        </div>
+        <button class="sheet-cta green" onclick="saveEx()" style="margin-bottom:20px;">기록 완료</button>
+      </div>
+      <div class="overlay" onclick="closeSheet()"></div>`;
+    }
+  }
+
+  app.innerHTML = html;
+  setTimeout(updateClock, 0);
+}
+
+function setRow(iconHtml, iconBg, name, desc, key) {
+  const on = S.alarms[key];
+  return `<div class="set-row">
+    <div class="set-left">
+      <div class="set-icon-box" style="background:${iconBg};">${iconHtml}</div>
+      <div><div class="set-name">${name}</div><div class="set-desc">${desc}</div></div>
+    </div>
+    <button class="tog ${on?'on':'off'}" onclick="toggleAlarm('${key}')"><div class="tog-k"></div></button>
+  </div>`;
+}
+
+// ── ACTIONS ───────────────────────────────────────────────
+function nextOb()   { S.obStep++; render(); }
+function setGender(g){ S.profile.gender=g; render(); }
+function setEx(n)   { S.profile.exFreq=n; render(); }
+function setSleep(n){ S.profile.sleep=n; render(); }
+function saveBody() {
+  // Values already synced via oninput handlers
+  const ageEl = document.getElementById('f-age');
+  const hEl   = document.getElementById('f-height');
+  const wEl   = document.getElementById('f-weight');
+  if(ageEl)    S.profile.age    = parseInt(ageEl.value)    || S.profile.age;
+  if(hEl)      S.profile.height = parseInt(hEl.value)      || S.profile.height;
+  if(wEl)      S.profile.weight = parseInt(wEl.value)      || S.profile.weight;
+  S.obStep = 2; render();
+}
+function finishOb()  { S.screen='main'; render(); }
+function goOb()      { S.obStep=1; S.screen='onboard'; render(); }
+function goScreen(s) { S.screen=s; render(); }
+function openSheet(t){ S.sheet=t; S.sf.mealTime=nowT(); S.sf.exTime=nowT(); render(); }
+function closeSheet(){ S.sheet=null; render(); }
+function toggleAlarm(k){ S.alarms[k]=!S.alarms[k]; render(); }
+function toggleSci(id){ S.sciOpen[id]=!S.sciOpen[id]; render(); }
+function toggleTheme(){ S.theme=S.theme==='light'?'dark':'light'; render(); }
+
+function saveMeal() {
+  const t = document.getElementById('meal-time')?.value||nowT();
+  const [hh,mm] = t.split(':');
+  const d = new Date(); d.setHours(parseInt(hh),parseInt(mm),0,0);
+  if(d > new Date()) d.setDate(d.getDate()-1);
+  S.lastMeal = {time:d.toISOString(), foodType:S.sf.foodType, qty:S.sf.qty};
+  S.sheet=null; render();
+}
+function saveEx() {
+  const t = document.getElementById('ex-time')?.value||nowT();
+  const [hh,mm] = t.split(':');
+  const d = new Date(); d.setHours(parseInt(hh),parseInt(mm),0,0);
+  if(d > new Date()) d.setDate(d.getDate()-1);
+  S.lastEx = {time:d.toISOString(), type:S.sf.exType, intensity:S.sf.intensity};
+  S.sheet=null; render();
+}
+
+
+function pickFood(el) {
+  const id = el.getAttribute('data-id');
+  if(id) { S.sf.foodType = id; render(); }
+}
+function pickEx(el) {
+  const id = el.getAttribute('data-id');
+  if(id) { S.sf.exType = id; render(); }
+}
+
+// ── 타이머 전용 업데이트 (깜빡임 없이 숫자만 교체) ────────────────
+
+function updateClock() {
+  const el = document.getElementById('hdr-clock');
+  if(!el) return;
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2,'0');
+  const mm = String(now.getMinutes()).padStart(2,'0');
+  const ss = String(now.getSeconds()).padStart(2,'0');
+  const days = ['일','월','화','수','목','금','토'];
+  const day = days[now.getDay()];
+  const dateStr = `${now.getMonth()+1}월 ${now.getDate()}일 (${day})`;
+  const isDark = document.body.className === 'dark';
+  const clr = isDark ? '#87CEEB' : '#1565C0';
+  el.innerHTML = `
+    <div style="font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:${clr};letter-spacing:.04em;line-height:1.1;">${hh}:${mm}:<span style="font-size:12px;">${ss}</span></div>
+    <div style="font-size:11px;font-weight:500;color:${clr};opacity:.8;letter-spacing:.02em;">${dateStr}</div>
+  `;
+}
+function tickTimers() {
+  updateClock();
+  S.now = Date.now();
+  if(S.screen !== 'main' || S.sheet) return;
+  const st = calcState();
+
+  if(st.state === 'DONT') {
+    // DON'T: 주황 카운트다운 업데이트
+    const cd = fmtCountdown(st.msRemain);
+    const elP = document.getElementById('cd-primary');
+    const elH = document.getElementById('cd-h');
+    const elM = document.getElementById('cd-m');
+    const elS = document.getElementById('cd-s');
+    if(elP) elP.textContent = cd.primary;
+    if(elH) elH.textContent = String(cd.h).padStart(2,'0');
+    if(elM) elM.textContent = String(cd.m).padStart(2,'0');
+    if(elS) elS.textContent = String(cd.s).padStart(2,'0');
+    const elDontFast = document.getElementById('dont-fast-hm');
+    if(elDontFast) elDontFast.textContent = fmtHM(st.fastMs);
+
+    // DO 달성 시점 감지 → 상태 전환 필요하면 full render
+    if(st.msRemain <= 0) { render(); return; }
+
+  } else {
+    // DO: 공복 타이머 업데이트
+    const elFast = document.getElementById('fast-hm');
+    if(elFast) elFast.textContent = fmtHM(st.fastMs);
+
+    // 14h/16h 마일스톤 뱃지 업데이트 (텍스트만)
+    const ms14=50400000, ms16=57600000;
+    const el14 = document.querySelector('.chip.next');
+    if(el14 && st.fastMs < ms14) {
+      const toNext = ms14 - st.fastMs;
+      el14.textContent = '⏱ ' + Math.ceil(toNext/60000) + '분';
+    }
+  }
+}
+
+setInterval(tickTimers, 1000);
+updateClock();
+render();
+</script>
+</body>
+</html>
