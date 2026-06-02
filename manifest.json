@@ -12,15 +12,15 @@
   "categories": ["health", "fitness"],
   "icons": [
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgMTIwIj4KICA8cmVjdCB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iI2ZmZmZmZiIvPgogIDxjaXJjbGUgY3g9IjM2IiBjeT0iMzgiIHI9IjUiIGZpbGw9IiNGRjNCMkYiLz4KICA8Y2lyY2xlIGN4PSI2MCIgY3k9IjM4IiByPSI1IiBmaWxsPSIjRkZDQzAwIi8+CiAgPGNpcmNsZSBjeD0iODQiIGN5PSIzOCIgcj0iNSIgZmlsbD0iIzM0Qzc1OSIvPgogIDx0ZXh0IHg9IjYwIiB5PSI4OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIKICAgICAgICBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssSW1wYWN0LHNhbnMtc2VyaWYiCiAgICAgICAgZm9udC1zaXplPSIzNSIgZm9udC13ZWlnaHQ9IjkwMCIKICAgICAgICB0ZXh0TGVuZ3RoPSI3MiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nQW5kR2x5cGhzIj4KICAgIDx0c3BhbiBmaWxsPSIjRkYzQjJGIj5EPC90c3Bhbj48dHNwYW4gZmlsbD0iI0ZGQ0MwMCI+TzwvdHNwYW4+PHRzcGFuIGZpbGw9IiMzNEM3NTkiPkQ8L3RzcGFuPgogIDwvdGV4dD4KPC9zdmc+",
+      "src": "/DOD/icon-192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgMTIwIj4KICA8cmVjdCB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iI2ZmZmZmZiIvPgogIDxjaXJjbGUgY3g9IjM2IiBjeT0iMzgiIHI9IjUiIGZpbGw9IiNGRjNCMkYiLz4KICA8Y2lyY2xlIGN4PSI2MCIgY3k9IjM4IiByPSI1IiBmaWxsPSIjRkZDQzAwIi8+CiAgPGNpcmNsZSBjeD0iODQiIGN5PSIzOCIgcj0iNSIgZmlsbD0iIzM0Qzc1OSIvPgogIDx0ZXh0IHg9IjYwIiB5PSI4OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIKICAgICAgICBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssSW1wYWN0LHNhbnMtc2VyaWYiCiAgICAgICAgZm9udC1zaXplPSIzNSIgZm9udC13ZWlnaHQ9IjkwMCIKICAgICAgICB0ZXh0TGVuZ3RoPSI3MiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nQW5kR2x5cGhzIj4KICAgIDx0c3BhbiBmaWxsPSIjRkYzQjJGIj5EPC90c3Bhbj48dHNwYW4gZmlsbD0iI0ZGQ0MwMCI+TzwvdHNwYW4+PHRzcGFuIGZpbGw9IiMzNEM3NTkiPkQ8L3RzcGFuPgogIDwvdGV4dD4KPC9zdmc+",
+      "src": "/DOD/icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ]
